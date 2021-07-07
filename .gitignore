@@ -7,3 +7,6 @@
 /UserAPI/obj
 /UsersApi
 /UserAPI/appsettings.Development.json
+/packages/
+/UserAPItest1/
+
