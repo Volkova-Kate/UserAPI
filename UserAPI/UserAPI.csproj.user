@@ -8,5 +8,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>UserAPI</ActiveDebugProfile>
+    <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
 </Project>
