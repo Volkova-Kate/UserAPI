@@ -34,7 +34,7 @@ namespace UserAPI.Controllers
             return user;
         }
 
-        [HttpGet("page")]
+        [HttpGet("page")]//pagination
         public ActionResult<List<User>> GetPage(string skip, string count)
         {
             if (!int.TryParse(skip, out var skipValue) || !int.TryParse(count, out var countValue))
