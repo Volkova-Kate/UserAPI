@@ -3,3 +3,7 @@
 ################################################################################
 
 /UserAPI/bin
+/.vs/UsersApi
+/UserAPI/obj
+/UsersApi
+/UserAPI/appsettings.Development.json
