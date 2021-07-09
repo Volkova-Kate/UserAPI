@@ -1,0 +1,9 @@
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/UserAPI/bin
+/.vs/UsersApi
+/UserAPI/obj
+/UsersApi
+/UserAPI/appsettings.Development.json
