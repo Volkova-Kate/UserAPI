@@ -1,3 +1,5 @@
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,9 +12,12 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using UserAPI.Infrastructure.Behaviours;
+using UserAPI.Infrastructure.Settings;
 using UserAPI.Models;
-using UserAPI.Services;
+using UserAPI.Repositories;
 
 namespace UserAPI
 {
@@ -29,15 +34,24 @@ namespace UserAPI
         public void ConfigureServices(IServiceCollection services)
         {
             // requires using Microsoft.Extensions.Options
-            services.Configure<UserstoreDatabaseSettings>(
-                Configuration.GetSection(nameof(UserstoreDatabaseSettings)));
+            services.Configure<UserStoreDatabaseSettings>(
+                Configuration.GetSection(nameof(UserStoreDatabaseSettings)));
 
-            services.AddSingleton<IUserstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<UserstoreDatabaseSettings>>().Value);
+            services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<UserStoreDatabaseSettings>>().Value);
 
-            services.AddSingleton<UserService>();
+            services.AddSingleton<UserRepository>();
+            services.AddSingleton<UserRepository>();
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());//система реквестов
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddControllers();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

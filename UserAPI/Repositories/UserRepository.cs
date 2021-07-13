@@ -4,24 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UserAPI.Models;
 
-
-namespace UserAPI.Services
+namespace UserAPI.Repositories
 {
-    public class UserService
+    public class UserRepository
     {
-        private readonly IMongoCollection<User> _users;
-
-        public UserService(IUserstoreDatabaseSettings settings)
+        public UserRepository (UserContext userContext)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            //считывает экземпляр сервера для выполнения операций с базой данных
-            var database = client.GetDatabase(settings.DatabaseName);
-            //представляет базу данных Mongo для выполнения операций
-
-            _users = database.GetCollection<User>(settings.UsersCollectionName);
-
-            //var ls = Get();
+            _users = userContext.UserCollection;
         }
+        private readonly IMongoCollection<User> _users;
 
         public List<User> Get() =>
             _users.Find(user => true).ToList();

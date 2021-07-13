@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using UserAPI.Models;
-using UserAPI.Services;
+using UserAPI.Repositories;
 
 namespace UserAPI.Controllers
 {
@@ -9,22 +9,22 @@ namespace UserAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly UserRepository _userRepository;
 
-        public UsersController(UserService userService)
+        public UsersController(UserRepository userRepository)
         //использует класс BookService для выполнения операций CRUD;
         {
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
         public ActionResult<List<User>> Get() =>
-            _userService.Get();
+            _userRepository.Get();
 
         [HttpGet("{id:length(24)}", Name = "GetUser")]
         public ActionResult<User> Get(string id)
         {
-            var user = _userService.Get(id);
+            var user = _userRepository.Get(id);
 
             if (user == null)
             {
@@ -39,13 +39,13 @@ namespace UserAPI.Controllers
         {
             if (!int.TryParse(skip, out var skipValue) || !int.TryParse(count, out var countValue))
                 return NotFound();
-            return _userService.GetPage(skipValue, countValue);
+            return _userRepository.GetPage(skipValue, countValue);
         }
 
         [HttpPost]
         public ActionResult<User> Create(User user)
         {
-            _userService.Create(user);
+            _userRepository.Create(user);
 
             return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
         }
@@ -53,14 +53,14 @@ namespace UserAPI.Controllers
         [HttpPut("{id:length(24)}")]
         public IActionResult Update(string id, User userIn)
         {
-            var user = _userService.Get(id);
+            var user = _userRepository.Get(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            _userService.Update(id, userIn);
+            _userRepository.Update(id, userIn);
 
             return NoContent();
         }
@@ -68,14 +68,14 @@ namespace UserAPI.Controllers
         [HttpDelete("{id:length(24)}")]
         public IActionResult Delete(string id)
         {
-            var user = _userService.Get(id);
+            var user = _userRepository.Get(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            _userService.Remove(user.Id);
+            _userRepository.Remove(user.Id);
 
             return NoContent();
         }
