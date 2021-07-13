@@ -4,24 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UserAPI.Models;
 using UserAPI.Infrastructure.Settings;
+using MongoDBExt;
+using Microsoft.Extensions.Options;
 
 namespace UserAPI.Repositories
 {
-    public class UserContext
+    public class UserContext : MongoDBContext
     {
-        private readonly IMongoCollection<User> _users;
-        public IMongoCollection<User> UserCollection => _users;
+		public UserContext(IOptions<MongoDBSettings> settings) : base(settings)
+		{
+		}
 
-        private readonly IMongoClient _client;
-        private readonly IMongoDatabase _database;
-        public UserContext(IUserStoreDatabaseSettings settings)
-        {
-            _client = new MongoClient(settings.ConnectionString);
-            //считывает экземпляр сервера для выполнения операций с базой данных
-            _database = _client.GetDatabase(settings.DatabaseName);
-            //представляет базу данных Mongo для выполнения операций
-
-            _users = _database.GetCollection<User>(settings.UsersCollectionName);
-        }
-    }
+		public IMongoCollection<User> UserCollection => _db.GetCollection<User>("Users");
+	}
 }

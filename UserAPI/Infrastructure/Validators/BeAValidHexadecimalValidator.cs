@@ -5,22 +5,21 @@ using MongoDB.Bson;
 
 namespace UserAPI.Infrastructure.Validators
 {
-	public class BeAValidHexadecimalValidator : PropertyValidator, IBeAValidHexadecimalValidator
+	public class BeAValidHexadecimalValidator<T, TProperty> : PropertyValidator<T, TProperty>, IBeAValidHexadecimalValidator
 	{
 		private readonly object _defaultValueForType;
 
-		public BeAValidHexadecimalValidator(object defaultValueForType) : base(
-			"Property must be valid hexadecimal string.") =>
+		public BeAValidHexadecimalValidator(object defaultValueForType) : base() =>
 			_defaultValueForType = defaultValueForType;
-
-		protected override bool IsValid(PropertyValidatorContext context)
+		public override string Name => "NotNullValidator";
+		public override bool IsValid(ValidationContext<T> context, TProperty value)
 		{
-			if (!(context.PropertyValue is string))
+			if (!(value is string))
 			{
 				return false;
 			}
 
-			switch (context.PropertyValue)
+			switch (value)
 			{
 				case null:
 				case string s when string.IsNullOrWhiteSpace(s):
@@ -40,6 +39,6 @@ namespace UserAPI.Infrastructure.Validators
 	{
 		public static IRuleBuilderOptions<T, TProperty> BeAValidHexadecimal<T, TProperty>(
 			this IRuleBuilder<T, TProperty> ruleBuilder) =>
-			ruleBuilder.SetValidator(new BeAValidHexadecimalValidator(default(TProperty)));
+			ruleBuilder.SetValidator(new BeAValidHexadecimalValidator<T,TProperty>(default(TProperty)));
 	}
 }

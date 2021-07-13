@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using UserAPI.Infrastructure.Base;
 using UserAPI.Models;
+using MongoDBExt;
 
 namespace UserAPI.Repositories
 {

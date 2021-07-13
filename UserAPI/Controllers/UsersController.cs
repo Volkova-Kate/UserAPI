@@ -1,84 +1,105 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+using MediatR;
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using UserAPI.Features.Users.Commands;
+using UserAPI.Features.Users.Queries;
 using UserAPI.Models;
 using UserAPI.Repositories;
 
-namespace UserAPI.Controllers
+namespace CQRS.Sample.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
-    {
-        private readonly UserRepository _userRepository;
+	//private readonly UserRepository _userRepository;
 
-        public UsersController(UserRepository userRepository)
-        //использует класс BookService для выполнения операций CRUD;
-        {
-            _userRepository = userRepository;
-        }
+	[Route("api/[controller]")]
+	[ApiController]
+	public class UsersController : ControllerBase
+	{
+		private readonly ILogger<UsersController> _logger;
+		private readonly IMediator _mediator;
 
-        [HttpGet]
-        public ActionResult<List<User>> Get() =>
-            _userRepository.Get();
+		public UsersController(IMediator mediator) =>
+			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-        [HttpGet("{id:length(24)}", Name = "GetUser")]
-        public ActionResult<User> Get(string id)
-        {
-            var user = _userRepository.Get(id);
+		/// <summary>
+		///     Постраничное получение продуктов
+		/// </summary>
+		/// <param name="request"></param>
+		/// <param name="token"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[ProducesResponseType(typeof(DataWithTotal<User>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesDefaultResponseType]
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+		//public async Task<ActionResult<DataWithTotal<User>>> Get() =>
+		//	_userRepository.Get();
+		public async Task<ActionResult<DataWithTotal<User>>> Get([FromQuery] GetUsersQuery request,
+			CancellationToken token) =>
+			Ok(await _mediator.Send(request, token));
 
-            return user;
-        }
+        /// <summary>
+        ///     Создание продукта
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="apiVersion"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
 
-        [HttpGet("page")]//pagination
-        public ActionResult<List<User>> GetPage(string skip, string count)
-        {
-            if (!int.TryParse(skip, out var skipValue) || !int.TryParse(count, out var countValue))
-                return NotFound();
-            return _userRepository.GetPage(skipValue, countValue);
-        }
+        //[HttpGet("page")]//pagination
+        //public async Task<ActionResult<DataWithTotal<User>>> GetPage(string skip, string count)
+        //{
+        //	if (!int.TryParse(skip, out var skipValue) || !int.TryParse(count, out var countValue))
+        //		return NotFound();
+        //	return _userRepository.GetPage(skipValue, countValue);
+        //}
 
         [HttpPost]
-        public ActionResult<User> Create(User user)
+        //[ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
+        //[ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        //[ProducesDefaultResponseType]
+        public async Task<IActionResult> Post([FromBody] AddUsersCommand client,
+            CancellationToken token)
         {
-            _userRepository.Create(user);
-
-            return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
+            User entity = await _mediator.Send(client, token);
+            return CreatedAtAction(nameof(Get), new { id = entity.Id, version = "1" }, entity);
         }
 
-        [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, User userIn)
-        {
-            var user = _userRepository.Get(id);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+        //[HttpPut]
+        //public IActionResult Update(string id, User userIn)
+        //{
+        //	var user = _userRepository.Get(id);
 
-            _userRepository.Update(id, userIn);
+        //	if (user == null)
+        //	{
+        //		return NotFound();
+        //	}
 
-            return NoContent();
-        }
+        //	_userRepository.Update(id, userIn);
 
-        [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
-        {
-            var user = _userRepository.Get(id);
+        //	return NoContent();
+        //}
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete]
+        //public IActionResult Delete(string id)
+        //{
+        //	var user = _userRepository.Get(id);
 
-            _userRepository.Remove(user.Id);
+        //	if (user == null)
+        //	{
+        //		return NotFound();
+        //	}
 
-            return NoContent();
-        }
+        //	_userRepository.Remove(user.Id);
 
+        //	return NoContent();
+        //}
     }
 }

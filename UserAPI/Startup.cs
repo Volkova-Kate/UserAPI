@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MongoDBExt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,20 +35,19 @@ namespace UserAPI
         public void ConfigureServices(IServiceCollection services)
         {
             // requires using Microsoft.Extensions.Options
-            services.Configure<UserStoreDatabaseSettings>(
-                Configuration.GetSection(nameof(UserStoreDatabaseSettings)));
+            services.Configure<MongoDBSettings>(
+                Configuration.GetSection(
+                    "DatabaseSettings"));
 
-            services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<UserStoreDatabaseSettings>>().Value);
+            //services.AddSingleton<IUserStoreDatabaseSettings>(sp =>
+            //    sp.GetRequiredService<IOptions<UserStoreDatabaseSettings>>().Value);
 
-            services.AddSingleton<UserRepository>();
-            services.AddSingleton<UserRepository>();
+            services.AddTransient<UserContext>();
+            services.AddTransient<IUsersRepository, UserRepository>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());//система реквестов
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddControllers();
