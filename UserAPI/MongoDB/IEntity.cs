@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace MongoDBExt
+namespace UserAPI.MongoDB
 {
 	/// <summary>
 	///     Generic Entity interface.

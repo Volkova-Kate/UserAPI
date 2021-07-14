@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace MongoDBExt
+namespace UserAPI.MongoDB
 {
 	/// <summary>
 	///     IRepository definition.

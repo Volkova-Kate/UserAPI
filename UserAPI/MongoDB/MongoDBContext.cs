@@ -3,8 +3,9 @@ using System;
 using Microsoft.Extensions.Options;
 
 using MongoDB.Driver;
+using MongoDBExt;
 
-namespace MongoDBExt
+namespace UserAPI.MongoDB
 {
 	public abstract class MongoDBContext
 	{

@@ -1,4 +1,4 @@
-namespace MongoDBExt
+namespace UserAPI.MongoDB
 {
 	public class MongoDBSettings
 	{
