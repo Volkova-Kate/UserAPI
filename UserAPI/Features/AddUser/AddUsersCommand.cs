@@ -8,9 +8,9 @@ using MediatR;
 using UserAPI.Models;
 using UserAPI.Repositories;
 
-namespace UserAPI.Features.Users.Commands
+namespace UserAPI.Features.AddUser
 {
-	public class AddUsersCommand : IRequest<User> //интерфейс команды
+	public class AddUsersCommand : IRequest<User> 
 	{
 		/// <summary>
 		///     Имя
@@ -27,7 +27,7 @@ namespace UserAPI.Features.Users.Commands
 		/// </summary>
 		public string Number { get; set; }
 
-		public class AddUserCommandHandler : IRequestHandler<AddUsersCommand, User> //обработчик нашей команды
+		public class AddUserCommandHandler : IRequestHandler<AddUsersCommand, User> 
 		{
 			private readonly IUsersRepository _usersRepository;
 

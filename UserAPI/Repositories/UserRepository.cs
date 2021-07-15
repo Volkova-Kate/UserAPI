@@ -3,8 +3,8 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using UserAPI.Models;
-using MongoDBExt;
 using System.Threading.Tasks;
+using UserAPI.MongoDB;
 
 namespace UserAPI.Repositories
 {
@@ -30,8 +30,7 @@ namespace UserAPI.Repositories
 
             filter ??= FilterDefinition<User>.Empty;
 
-            IFindFluent<User, User> clicks = collection.Find(filter)
-                .Skip(skip);
+            IFindFluent<User, User> clicks = collection.Find(filter).Skip(skip);
 
             if (take.HasValue)
             {
@@ -42,13 +41,13 @@ namespace UserAPI.Repositories
         }
 
         public List<User> Get() =>
-            collection.Find(user => true).ToList();
+            collection.Find(user => true).ToList();//ToListAsync
 
         public User Get(string id) =>
             collection.Find<User>(user => user.Id == id).FirstOrDefault();
 
         public List<User> GetPage(int skip, int count) =>
-            collection.Find(user => true).Skip(skip).Limit(count).ToList();
+            collection.Find(user => true).Skip(skip).Limit(count).ToList();//ToListAsync
 
         public User Create(User user)
         {

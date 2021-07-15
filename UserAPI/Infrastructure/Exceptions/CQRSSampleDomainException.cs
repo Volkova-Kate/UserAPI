@@ -2,18 +2,18 @@
 
 namespace UserAPI.Infrastructure.Exceptions
 {
-	public class CqrsSampleDomainException : Exception
+	public class UserAPIDomainException : Exception
 	{
-		public CqrsSampleDomainException()
+		public UserAPIDomainException()
 		{
 		}
 
-		public CqrsSampleDomainException(string message)
+		public UserAPIDomainException(string message)
 			: base(message)
 		{
 		}
 
-		public CqrsSampleDomainException(string message, Exception innerException)
+		public UserAPIDomainException(string message, Exception innerException)
 			: base(message, innerException)
 		{
 		}

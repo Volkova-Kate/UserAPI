@@ -3,7 +3,6 @@ using System;
 using Microsoft.Extensions.Options;
 
 using MongoDB.Driver;
-using MongoDBExt;
 
 namespace UserAPI.MongoDB
 {

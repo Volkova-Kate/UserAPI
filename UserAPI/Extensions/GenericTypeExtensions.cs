@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace UserAPI.Extensions
 {
-	public static class GenericTypeExtensions
+	internal static class GenericTypeExtensions
 	{
 		public static string GetGenericTypeName(this Type type)
 		{

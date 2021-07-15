@@ -7,20 +7,18 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using UserAPI.Features.Users.Commands;
-using UserAPI.Features.Users.Queries;
+using UserAPI.Features.AddUser;
+using UserAPI.Features.GetUsers;
 using UserAPI.Models;
 using UserAPI.Repositories;
 
-namespace CQRS.Sample.Controllers
+namespace UserAPI.Controllers
 {
-	//private readonly UserRepository _userRepository;
 
 	[Route("api/[controller]")]
 	[ApiController]
 	public class UsersController : ControllerBase
 	{
-		private readonly ILogger<UsersController> _logger;
 		private readonly IMediator _mediator;
 
 		public UsersController(IMediator mediator) =>
@@ -38,8 +36,6 @@ namespace CQRS.Sample.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesDefaultResponseType]
 
-		//public async Task<ActionResult<DataWithTotal<User>>> Get() =>
-		//	_userRepository.Get();
 		public async Task<ActionResult<DataWithTotal<User>>> Get([FromQuery] GetUsersQuery request,
 			CancellationToken token) =>
 			Ok(await _mediator.Send(request, token));

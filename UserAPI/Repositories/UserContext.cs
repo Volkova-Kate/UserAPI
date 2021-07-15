@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UserAPI.Models;
 using UserAPI.Infrastructure.Settings;
-using MongoDBExt;
 using Microsoft.Extensions.Options;
+using UserAPI.MongoDB;
 
 namespace UserAPI.Repositories
 {

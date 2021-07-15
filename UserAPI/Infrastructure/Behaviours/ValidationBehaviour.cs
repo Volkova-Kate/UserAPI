@@ -48,7 +48,7 @@ namespace UserAPI.Infrastructure.Behaviours
 						"Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}",
 						typeName, request, failures);
 
-					throw new CqrsSampleDomainException(
+					throw new UserAPIDomainException(
 						$"Command Validation Errors for type {typeof(TRequest).Name}",
 						new ValidationException("Validation exception", failures));
 				}

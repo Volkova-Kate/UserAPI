@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using UserAPI.Models;
-using MongoDBExt;
+using UserAPI.MongoDB;
 
 namespace UserAPI.Repositories
 {

@@ -12,7 +12,7 @@ using UserAPI.Infrastructure.Validators;
 using UserAPI.Models;
 using UserAPI.Repositories;
 
-namespace UserAPI.Features.Users.Queries
+namespace UserAPI.Features.GetUsers
 {
 	public class GetUsersQuery : IRequest<DataWithTotal<User>>, IPagingRequest
 	{
